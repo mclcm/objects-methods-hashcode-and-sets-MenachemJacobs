@@ -69,9 +69,8 @@ public class Persons {
 
     @Override
     public boolean equals(Object o) {
-        boolean isEqual = false;
 
-        return isEqual;
+        return o.hashCode() == this.hashCode();
     }
 
     @Override
