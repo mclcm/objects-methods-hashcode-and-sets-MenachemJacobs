@@ -156,6 +156,13 @@ public class Person {
         return firstName + " " + lastName + "\n is a " + (CURRENT_YEAR - yearOfBirth) + " year old " + gender + "\n";
     } // should provide an annotated display of Person info
 
+    /**
+     * Indicates whether some other object is "equal to" this one.
+     * Equality is based on the first name, last name, gender, and year of birth.
+     *
+     * @param o the reference object with which to compare
+     * @return true if this object is the same as the o argument; false otherwise
+     */
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
@@ -165,6 +172,13 @@ public class Person {
         return Objects.equals(input.getFirstName(), firstName) && Objects.equals(input.getLastName(), lastName) && input.getIsMale() == isMale && input.getYearOfBirth() == yearOfBirth;
     }
 
+    /**
+     * Returns a hash code value for the person.
+     * The hash code is generated based on a custom method involving the first name,
+     * last name, gender, and year of birth.
+     *
+     * @return a hash code value for the person
+     */
     @Override
     public int hashCode() {
         //uses a custom method of generating unique integer values for unique integer pairs.
@@ -184,6 +198,13 @@ public class Person {
         return (int)hashVal;
     } // hand-code this method without using Objects static methods
 
+    /**
+     * Helper method for generating a hash code based on a custom algorithm.
+     *
+     * @param currentHashValue the current hash value to be updated
+     * @param name the name to be hashed
+     * @return the updated hash value
+     */
     private long nameHasher(long currentHashValue, String name){
         name = name.toLowerCase();
         long hashedBrown = currentHashValue;
