@@ -22,8 +22,8 @@ public class Person {
      * The default values are an empty first and last name, male gender, and a birth year of 1950.
      */
     public Person() {
-        firstName = "";
-        lastName = "";
+        firstName = "John";
+        lastName = "Smith";
         isMale = true;
         yearOfBirth = 1950;
     }
