@@ -12,6 +12,19 @@ public class Persons {
         yearOfBirth = 1950;
     }
 
+    public Persons(String fName, String lName, boolean gender, short year){
+        isTextfull(fName);
+        firstName = fName;
+
+        isTextfull(lName);
+        lastName = lName;
+
+        isMale = gender;
+
+        isTimefull(year);
+        yearOfBirth = year;
+    }
+
     public void setFirstName(String firstName){
         isNull(firstName);
         this.firstName = firstName;
@@ -50,13 +63,17 @@ public class Persons {
 
     private void isNull(Object o){
         if (o == null) {
-            throw new Error("May not set values to null");
+            throw new Error("May not set a person field to null");
         }
     }
 
-    private void isTextless;
-    private void isTimefull(int year){
-        if(year < 1950 || year < CURRENTYEAR)
+    private void isTextfull(String input){
+        isNull(input);
+        if(input.isEmpty())
+            throw new Error("may not fill a person field with an empty string");
+    }
+    private void isTimefull(short year){
+        if(year < 1950 || year >= CURRENTYEAR)
             throw new Error("year out of bounds");
     }
 
