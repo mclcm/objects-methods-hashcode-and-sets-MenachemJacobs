@@ -1,11 +1,9 @@
-import java.util.Calendar;
-
 public class Persons {
-    final int CURRENTYEAR = 2023;
-    String firstName;
-    String lastName;
-    boolean isMale;
-    short yearOfBirth;
+    static final int CURRENTYEAR = 2023;
+    private String firstName;
+    private String lastName;
+    private boolean isMale;
+    private short yearOfBirth;
 
     public Persons() {
         firstName = "";
@@ -30,7 +28,7 @@ public class Persons {
     }
 
     public void setYearOfBirth(short yearOfBirth){
-        isNull(yearOfBirth);
+        isTimefull(yearOfBirth);
         this.yearOfBirth = yearOfBirth;
     }
 
@@ -57,7 +55,10 @@ public class Persons {
     }
 
     private void isTextless;
-    private void isTimefull;
+    private void isTimefull(int year){
+        if(year < 1950 || year < CURRENTYEAR)
+            throw new Error("year out of bounds");
+    }
 
     /**
      * Returns a string representation of the object.

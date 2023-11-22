@@ -11,10 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class PersonsTest {
     Persons DavidChaimelwitz;
     @BeforeEach
-    void setUp() throws Exception {
+    void setUp(){
         DavidChaimelwitz.setMale(true);
         DavidChaimelwitz.setFirstName("David");
-        DavidChaimelwitz.
+        DavidChaimelwitz.setLastName("Chaimelwitz");
+        DavidChaimelwitz.setYearOfBirth((short) 2000);
 
     }
 
