@@ -19,7 +19,7 @@ public class Person {
 
     /**
      * Constructs a new Person object with default values.
-     * The default values are an empty first and last name, male gender, and a birth year of 1950.
+     * The default values are first name 'John' and last name 'Smith', male gender, and a birth year of 1950.
      */
     public Person() {
         firstName = "John";
@@ -37,7 +37,9 @@ public class Person {
      * @param year   the year of birth of the person
      * @throws Error if any of the input parameters are invalid
      */
-    public Person(String fName, String lName, boolean gender, short year){
+    public Person(String fName, String lName, boolean gender, short year) {
+        //short circuit wise, I should run the tests first, but I feel that sacrifices readability,
+        //and assignments are not time intensive
         isTextfull(fName);
         firstName = fName;
 
@@ -56,7 +58,7 @@ public class Person {
      * @param firstName the new first name to set
      * @throws Error if the provided first name is null or empty
      */
-    public void setFirstName(String firstName){
+    public void setFirstName(String firstName) {
         isTextfull(firstName);
         this.firstName = firstName;
     }
@@ -67,7 +69,7 @@ public class Person {
      * @param lastName the new first name to set
      * @throws Error if the provided first name is null or empty
      */
-    public void setLastName(String lastName){
+    public void setLastName(String lastName) {
         isTextfull(lastName);
         this.lastName = lastName;
     }
@@ -77,7 +79,7 @@ public class Person {
      *
      * @param gender the new (true for male, false for female)
      */
-    public void setIsMale(boolean gender){
+    public void setIsMale(boolean gender) {
         this.isMale = gender;
     }
 
@@ -87,7 +89,7 @@ public class Person {
      * @param yearOfBirth the new year of birth to set
      * @throws Error if the provided year is out of bounds
      */
-    public void setYearOfBirth(short yearOfBirth){
+    public void setYearOfBirth(short yearOfBirth) {
         isTimefull(yearOfBirth);
         this.yearOfBirth = yearOfBirth;
     }
@@ -128,20 +130,21 @@ public class Person {
         return yearOfBirth;
     }
 
-    private void isNull(Object o){
+    private void isNull(Object o) {
         if (o == null) {
-            throw new Error("May not set a person field to null");
+            throw new IllegalArgumentException("May not set a person field to null");
         }
     }
 
-    private void isTextfull(String input){
+    private void isTextfull(String input) {
         isNull(input);
-        if(input.isEmpty())
-            throw new Error("may not fill a person field with an empty string");
+        if (input.isEmpty())
+            throw new IllegalArgumentException("may not fill a person field with an empty string");
     }
-    private void isTimefull(short year){
-        if(year < 1950 || year >= CURRENT_YEAR)
-            throw new Error("year out of bounds");
+
+    private void isTimefull(short year) {
+        if (year < 1950 || year >= CURRENT_YEAR)
+            throw new IllegalArgumentException("year out of bounds");
     }
 
     /**
@@ -153,7 +156,7 @@ public class Person {
     public String toString() {
         String gender = isMale ? "Man" : "Woman";
 
-        return firstName + " " + lastName + "\n is a " + (CURRENT_YEAR - yearOfBirth) + " year old " + gender + "\n";
+        return firstName + " " + lastName + "\nis a " + (CURRENT_YEAR - yearOfBirth) + " year old " + gender + "\n";
     } // should provide an annotated display of Person info
 
     /**
@@ -167,7 +170,7 @@ public class Person {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
-        Person input = (Person)o;
+        Person input = (Person) o;
 
         return Objects.equals(input.getFirstName(), firstName) && Objects.equals(input.getLastName(), lastName) && input.getIsMale() == isMale && input.getYearOfBirth() == yearOfBirth;
     }
@@ -181,31 +184,34 @@ public class Person {
      */
     @Override
     public int hashCode() {
-        //uses a custom method of generating unique integer values for unique integer pairs.
+        //uses a custom method of generating unique integer values for all integer pairs.
         //The system simply counts all integer pairs, starting with 1,0 = 1, and 1,1 = 2.
-        //gender is captured via parity encoding. Good for encoding one binary field.
-        long hashVal;
-
-        hashVal = nameHasher(1, firstName);
+        //gender is captured via parity encoding. This system is good for encoding binary fields.
+        long hashVal = 0;
 
         hashVal = nameHasher(hashVal, firstName);
 
-        hashVal = (hashVal * (hashVal + 1) / 2) - 1 + yearOfBirth;
+        hashVal = nameHasher(hashVal, firstName);
+
+        hashVal = hashVal > yearOfBirth ? pairCounter(hashVal, yearOfBirth): pairCounter(yearOfBirth, hashVal);
 
         //parity now reveals gender
         hashVal = isMale ? hashVal * 2 + 1 : hashVal * 2;
 
-        return (int)hashVal;
+        return (int) hashVal;
     } // hand-code this method without using Objects static methods
 
     /**
-     * Helper method for generating a hash code based on a custom algorithm.
+     * Generates a custom hash value based on a given algorithm for string names.
+     * <p>
+     * This method converts each character of the given name to its integer representation
+     * and combines them using a collision-less pair counting approach.
      *
      * @param currentHashValue the current hash value to be updated
-     * @param name the name to be hashed
+     * @param name             the name to be hashed
      * @return the updated hash value
      */
-    private long nameHasher(long currentHashValue, String name){
+    private long nameHasher(long currentHashValue, String name) {
         name = name.toLowerCase();
         long hashedBrown = currentHashValue;
         int convertedChar;
@@ -213,9 +219,24 @@ public class Person {
         //A method of my own devising for collision-less integer generation
         for (int i = 0; i < name.length(); i++) {
             convertedChar = (int) name.charAt(i) - CHAR_TO_INT;
-            hashedBrown = (hashedBrown * (hashedBrown + 1) / 2) - 1 + convertedChar;
+
+            hashedBrown = hashedBrown > convertedChar ? pairCounter(hashedBrown, convertedChar) : pairCounter(convertedChar, hashedBrown);
         }
 
         return hashedBrown;
+    }
+
+    /**
+     * Computes a unique integer value for a pair of integers.
+     *
+     * This method uses a formula for generating unique integer values based on the
+     * combination of two integers, ensuring a collision-less mapping.
+     *
+     * @param greater the greater of the two integers
+     * @param lesser  the lesser of the two integers
+     * @return the computed unique integer value
+     */
+    private long pairCounter(long greater, long lesser) {
+        return (greater * (greater + 1) / 2) - 1 + lesser;
     }
 }
