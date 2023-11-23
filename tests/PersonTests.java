@@ -1,6 +1,10 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -87,6 +91,30 @@ class PersonsTest {
         int testableHash = cloner(DavidChaimelwitz).hashCode();
 
         assertEquals(hashToMatch, testableHash, "Hash code generation is not case invariant");
+    }
+
+    @Test
+    void profProfligation(){
+        Person[] peopleArray = new Person[10];
+
+        for (int i = 0; i < 10; i++) {
+            peopleArray[i] = randomBuilder();
+        }
+
+        Set<Person> peopleSet = new HashSet<>(Arrays.asList(peopleArray));
+        Person[] peopleArrayTwo = new Person[10];
+        int index = 0;
+
+        for (Person guy : peopleSet) {
+            peopleArrayTwo[index] = guy;
+            index++;
+        }
+
+        for (Person guy : peopleArray) {
+            assertTrue(peopleSet.contains(guy));
+        }
+
+        assertNotEquals(peopleArray, peopleArrayTwo);
     }
     
     Person cloner(Person Donor){
