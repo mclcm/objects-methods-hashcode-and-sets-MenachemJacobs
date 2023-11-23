@@ -33,7 +33,7 @@ class PersonsTest {
     @Test
     void toString_Normal(){
         String gender = DavidChaimelwitz.getIsMale() ? "Man" : "Woman";
-        String assumed = DavidChaimelwitz.getFirstName() + " " + DavidChaimelwitz.getLastName() + "\n is a " + (CURRENT_YEAR - DavidChaimelwitz.getYearOfBirth()) + " year old " + gender + "\n";
+        String assumed = DavidChaimelwitz.getFirstName() + " " + DavidChaimelwitz.getLastName() + "\nis a " + (CURRENT_YEAR - DavidChaimelwitz.getYearOfBirth()) + " year old " + gender + "\n";
 
         String testable = DavidChaimelwitz.toString();
 
@@ -45,7 +45,7 @@ class PersonsTest {
         Person Rando = randomBuilder();
 
         String gender = Rando.getIsMale() ? "Man" : "Woman";
-        String assumed = Rando.getFirstName() + " " + Rando.getLastName() + "\n is a " + (CURRENT_YEAR - Rando.getYearOfBirth()) + " year old " + gender + "\n";
+        String assumed = Rando.getFirstName() + " " + Rando.getLastName() + "\nis a " + (CURRENT_YEAR - Rando.getYearOfBirth()) + " year old " + gender + "\n";
 
         String testable = Rando.toString();
 
@@ -70,6 +70,17 @@ class PersonsTest {
         testable.setFirstName(DavidChaimelwitz.getFirstName());
 
         assertEquals(DavidChaimelwitz, testable, "equals() fails in the case where values have been set to match");
+    }
+
+    @Test
+    void equals_Edge_NonPersonComparison(){
+        Object[] personal = new Object[4];
+        personal[0] = DavidChaimelwitz.getFirstName();
+        personal[1] = DavidChaimelwitz.getLastName();
+        personal[2] = DavidChaimelwitz.getIsMale();
+        personal[3] = DavidChaimelwitz.getYearOfBirth();
+
+        assertNotEquals(DavidChaimelwitz, personal, "equals() fails to detect differences between classes");
     }
 
     @Test
