@@ -191,7 +191,7 @@ public class Person {
 
         hashVal = nameHasher(hashVal, firstName);
 
-        hashVal = nameHasher(hashVal, firstName);
+        hashVal = nameHasher(hashVal, lastName);
 
         hashVal = hashVal > yearOfBirth ? pairCounter(hashVal, yearOfBirth): pairCounter(yearOfBirth, hashVal);
 
