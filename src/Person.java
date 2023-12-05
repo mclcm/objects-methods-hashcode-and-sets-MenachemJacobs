@@ -220,7 +220,7 @@ public class Person {
         for (int i = 0; i < name.length(); i++) {
             convertedChar = (int) name.charAt(i) - CHAR_TO_INT;
 
-            hashedBrown = hashedBrown > convertedChar ? pairCounter(hashedBrown, convertedChar) : pairCounter(convertedChar, hashedBrown);
+            hashedBrown = Math.abs(hashedBrown) > convertedChar ? pairCounter(hashedBrown, convertedChar) : pairCounter(convertedChar, hashedBrown);
         }
 
         return hashedBrown;
